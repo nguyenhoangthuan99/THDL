@@ -1,0 +1,50 @@
+version: "3.5"
+
+services:
+  backend:
+    image: thdl:latest
+    restart: always
+    build:
+      context: .
+    #network_mode: host
+    volumes:
+      #- ./save_log:/smart-car-packing/save_log
+      - ./:/app
+    ports:
+    - 8000:8000
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "3m"
+        max-file: "2"
+    depends_on:
+      - redis
+      - celery_worker
+    command:
+      uvicorn app:app --host 0.0.0.0 --port 8000 --reload
+    
+  celery_worker:
+    image: thdl:latest
+    restart: always
+    #network_mode: host
+    volumes:
+      #- ./save_log:/smart-car-packing/save_log
+      - ./:/app
+    depends_on:
+      - redis
+    command:
+     celery -A worker.tasks worker --loglevel=INFO --concurrency=100
+
+  redis:
+    image: redis:latest
+    restart: always
+    #network_mode: host
+    command:
+      redis-server --maxmemory 256mb
+    ports:
+      - 6379:6379
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "3m"
+        max-file: "2"
