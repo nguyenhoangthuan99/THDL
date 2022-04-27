@@ -29,20 +29,21 @@ app.add_middleware(
 settings = Settings()
 @app.post("/search")
 async def search(req:RequestSearch):
-    job_id = "toanmath-"+ str(uuid.uuid4())
-    result = tasks.run_session.apply_async(
-            args=[
-                req.dict(),
-                
-            ],
-            task_id=job_id,
-        )
-    return {"toanmath":job_id}
+    final = {}
+    for web in settings.list_webpage:
+        job_id = "toanmath-"+ str(uuid.uuid4())
+        result = tasks.run_session.apply_async(
+                args=[
+                    req.dict(),
+                    web
+                    
+                ],
+                task_id=job_id,
+            )
+        final[web] = job_id
+    return final
     
 
-@app.get("/", response_class=HTMLResponse)
-async def read_item(request: Request):
-	return templates.TemplateResponse("index.html", {"request": request})
 
 @app.get(
     "/result/{task_id}"
@@ -53,5 +54,9 @@ async def get_annotate_result(task_id:str):
         return await a_get_result(task)
     except:
         raise HTTPException(status_code=422, detail=f"No tasks found")
+@app.get("/", response_class=HTMLResponse)
+async def read_item(request: Request):
+	return templates.TemplateResponse("index.html", {"request": request})
+
 if __name__ == "__main__":
     uvicorn.run(app, host=settings.host,port=settings.port)

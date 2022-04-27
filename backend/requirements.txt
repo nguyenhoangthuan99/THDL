@@ -11,3 +11,4 @@ passlib~=1.7.4
 python-jose
 uuid
 redis
+beautifulsoup4
