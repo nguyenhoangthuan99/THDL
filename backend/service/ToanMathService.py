@@ -2,9 +2,11 @@ from .Base import BaseService
 from model.request import RequestSearch
 from model.responses import Response
 
+
 class ToanMathService(BaseService):
     def __init__(self,):
         super(ToanMathService, self).__init__()
+        
 
     def rewriteQuery(self,req:RequestSearch)-> str:
         url = None
@@ -23,11 +25,11 @@ class ToanMathService(BaseService):
             url += "/page/"+str(req.page)
         return url
 
-    def process(self,req:RequestSearch):
+    async def process(self,req:RequestSearch):
         if req.text is None or req.text == "":
             results = []
             url = self.rewriteQuery(req)
-            soup = self.doQuery(url)
+            soup = await self.asyncDoQuery(url)
             records = soup.find_all('div', class_='mh-col-1-2 mh-posts-grid-col clearfix')
             for record in records:
                 date = record.find("div",class_='mh-meta entry-meta').find("a")
@@ -40,4 +42,5 @@ class ToanMathService(BaseService):
                 results.append(result)
             return results
         else:
+
             return []

@@ -26,6 +26,8 @@ services:
   celery_worker:
     image: thdl:latest
     restart: always
+    environment:
+      MODE: worker 
     #network_mode: host
     volumes:
       #- ./save_log:/smart-car-packing/save_log

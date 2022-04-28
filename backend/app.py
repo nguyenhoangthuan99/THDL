@@ -31,7 +31,7 @@ settings = Settings()
 async def search(req:RequestSearch):
     final = {}
     for web in settings.list_webpage:
-        job_id = "toanmath-"+ str(uuid.uuid4())
+        job_id = str(web)+"-"+ str(uuid.uuid4())
         result = tasks.run_session.apply_async(
                 args=[
                     req.dict(),
@@ -43,7 +43,21 @@ async def search(req:RequestSearch):
         final[web] = job_id
     return final
     
-
+@app.post("/search/{web}")
+async def search(req:RequestSearch):
+    final = {}
+    
+    job_id = str(web)+"-"+ str(uuid.uuid4())
+    result = tasks.run_session.apply_async(
+            args=[
+                req.dict(),
+                web
+                
+            ],
+            task_id=job_id,
+        )
+    final[web] = job_id
+    return final
 
 @app.get(
     "/result/{task_id}"

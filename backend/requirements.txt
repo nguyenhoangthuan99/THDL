@@ -12,3 +12,4 @@ python-jose
 uuid
 redis
 beautifulsoup4
+requests-async
