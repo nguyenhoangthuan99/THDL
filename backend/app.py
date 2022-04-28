@@ -44,7 +44,7 @@ async def search(req:RequestSearch):
     return final
     
 @app.post("/search/{web}")
-async def search(req:RequestSearch):
+async def search_one_web(req:RequestSearch,web:str):
     final = {}
     
     job_id = str(web)+"-"+ str(uuid.uuid4())
@@ -58,6 +58,10 @@ async def search(req:RequestSearch):
         )
     final[web] = job_id
     return final
+@app.get("/list-web-pages")
+async def get_list_web_pages():
+    return settings.list_webpage
+
 
 @app.get(
     "/result/{task_id}"

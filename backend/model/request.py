@@ -13,11 +13,13 @@ class Type(str,Enum):
 class Subject(str,Enum):
     MATH = "MATH"
 
+
+
 class RequestSearch(BaseModel):
     type:Optional[Type] = None
     subject:Optional[Subject] = None # 
     grade:Optional[str] = None # 1-2-3-4-5-6-7-8-9-10-11-12
-    level:Optional[str] = None # 1-2-3
+    level:Optional[str ]= None # 1-2-3
     text:Optional[str]=None
     page:int = 1
     
