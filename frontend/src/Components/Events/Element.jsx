@@ -26,7 +26,8 @@ export default class Element extends React.Component {
         this.SearchMore();
     };
     async Search(){
-        var task_id = this.props.task[this.props.web];
+        var task_id = this.props.task.results[this.props.web];
+        console.log("task id",task_id)
         this.setState({loading:true})
         var result= await api.getResult(task_id);
         this.setState({list:[...this.state.list,...result]})
@@ -34,6 +35,14 @@ export default class Element extends React.Component {
     }
     async SearchMore(){
         this.setState({loading:true})
+        var body = {
+            "type": this.props.type,
+            "subject": this.props.subject,
+            "grade": this.props.grade,
+            "level": this.props.level,
+            "text": this.props.text,
+            "page": this.state.page
+        }
         var result= await api.searchOneWeb(body,this.state.web);
         this.setState({list:[...this.state.list,...result]})
         this.setState({loading:false})
