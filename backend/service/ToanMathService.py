@@ -2,7 +2,7 @@ from .Base import BaseService
 from model.request import RequestSearch
 from model.responses import Response
 import asyncio
-
+from fastapi import HTTPException
 class ToanMathService(BaseService):
     def __init__(self,):
         super(ToanMathService, self).__init__()
@@ -10,7 +10,7 @@ class ToanMathService(BaseService):
 
     def rewriteQuery(self,req:RequestSearch)-> str:
         url = None
-        if req.level == "3" and req.subject == "MATH":
+        if (req.level == "3" or (int(req.grade)>=10 and req.level==""))and req.subject == "MATH":
             if req.type == "TRY":
                 url = "https://toanmath.com/de-thi-thu-mon-toan"
             elif req.type in ["MidHK1","MidHK2","HK1","HK2"]:

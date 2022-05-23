@@ -41,7 +41,7 @@ async def search(req:RequestSearch):
                 task_id=job_id,
             )
         final[web] = job_id
-    return final
+    return {"result":final}
     
 @app.post("/search/{web}")
 async def search_one_web(req:RequestSearch,web:str):
@@ -72,9 +72,19 @@ async def get_annotate_result(task_id:str):
         return await a_get_result(task)
     except:
         raise HTTPException(status_code=422, detail=f"No tasks found")
+
+class SPAStaticFiles(StaticFiles):
+	async def get_response(self, path: str, scope):
+		response = await super().get_response(path, scope)
+		if response.status_code == 404:
+			response = await super().get_response('.', scope)
+		return response
+
+app.mount('/', SPAStaticFiles(directory='build', html=True), name='build')
+"""
 @app.get("/", response_class=HTMLResponse)
 async def read_item(request: Request):
 	return templates.TemplateResponse("index.html", {"request": request})
-
+"""
 if __name__ == "__main__":
     uvicorn.run(app, host=settings.host,port=settings.port)
