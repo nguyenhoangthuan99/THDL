@@ -3,7 +3,7 @@ version: "3.5"
 services:
   backend:
     image: thdl:latest
-    restart: always
+    #restart: always
     build:
       context: .
     #network_mode: host
@@ -24,7 +24,7 @@ services:
     
   celery_worker:
     image: thdl:latest
-    restart: always
+    #restart: always
     environment:
       MODE: worker 
     #network_mode: host
@@ -37,7 +37,7 @@ services:
 
   redis:
     image: redis:latest
-    restart: always
+   # restart: always
     #network_mode: host
     command:
       redis-server --maxmemory 512mb

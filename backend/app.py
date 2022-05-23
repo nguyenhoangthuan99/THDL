@@ -19,8 +19,7 @@ import uuid
 import uvicorn, celery
 import json
 app = FastAPI()
-with open('result.json', 'r') as fp:
-        data = json.load(fp)
+
 app.add_middleware(
 	CORSMiddleware,
 	allow_origins=["*"],
@@ -30,7 +29,7 @@ app.add_middleware(
 )
 settings = Settings()
 @app.post("/search")
-async def search(req:RequestSearch):
+def search(req:RequestSearch):
     final = {}
     for web in settings.list_webpage:
         job_id = str(web)+"-"+ str(uuid.uuid4())
@@ -67,14 +66,15 @@ async def get_list_web_pages():
 @app.get(
     "/result/{task_id}"
 )
-async def get_annotate_result(task_id:str):
-    global data
+def get_annotate_result(task_id:str):
+    with open('result.json', 'r') as fp:
+        data = json.load(fp)
     if task_id in data.keys():
         return data[task_id]
     else:
         try:
             task=celery.result.AsyncResult(task_id)
-            res = await a_get_result(task)
+            res =  a_get_result(task)
             data[task_id] = res
             with open('result.json', 'w') as fp:
                 json.dump(data, fp,indent=4,ensure_ascii=False)
