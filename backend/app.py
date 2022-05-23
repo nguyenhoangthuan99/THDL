@@ -72,15 +72,15 @@ def get_annotate_result(task_id:str):
     if task_id in data.keys():
         return data[task_id]
     else:
-        try:
+        #try:
             task=celery.result.AsyncResult(task_id)
             res =  a_get_result(task)
             data[task_id] = res
             with open('result.json', 'w') as fp:
                 json.dump(data, fp,indent=4,ensure_ascii=False)
             return res
-        except:
-            raise HTTPException(status_code=422, detail=f"No tasks found")
+        #except:
+        #    raise HTTPException(status_code=422, detail=f"No tasks found")
 
 class SPAStaticFiles(StaticFiles):
 	async def get_response(self, path: str, scope):

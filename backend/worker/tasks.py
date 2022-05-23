@@ -8,8 +8,7 @@ settings = Settings()
 sys.path.append("..")
 celery = get_celery()
 import os
-if os.environ.get("MODE") == "worker":
-    loop = asyncio.get_event_loop()
+
 @celery.task(bind=True)
 def run_session(self, req:dict,engine:str):
     engine = FACTORY[engine]()

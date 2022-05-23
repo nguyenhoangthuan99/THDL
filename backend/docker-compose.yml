@@ -33,7 +33,7 @@ services:
     depends_on:
       - redis
     command:
-     celery -A worker.tasks worker --loglevel=INFO --concurrency=6
+     celery -A worker.tasks worker --loglevel=INFO --concurrency=100
 
   redis:
     image: redis:latest

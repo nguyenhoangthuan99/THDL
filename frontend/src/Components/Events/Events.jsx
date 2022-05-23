@@ -51,8 +51,9 @@ export default class Events extends React.Component {
         
         var res = await api.searchall(body);
         
-        console.log("result task id",res)
+        
         this.setState({results:res.data.result})
+        console.log("result task id",this.state.results)
     };
     render() {
         return (
@@ -184,15 +185,8 @@ export default class Events extends React.Component {
                     <div className="element">
                         <Element title="ToanMath.com"  task={this.state.results} web = "toanmath"></Element>
                     </div>   
-                    <div className="element">
-                        <Element title="ToanMath.com"  task={this.state.results} web = "toanmath"></Element>
-                    </div>   
-                    <div className="element">
-                        <Element title="ToanMath.com"  task={this.state.results} web = "toanmath"></Element>
-                    </div>   
-                    <div className="element">
-                        <Element title="ToanMath.com"  task={this.state.results} web = "toanmath"></Element>
-                    </div>   
+                    
+                    
                 </div>             
                 
                 <div><h1>Tổng hợp</h1></div>         

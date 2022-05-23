@@ -21,9 +21,9 @@ def get_celery() -> Celery:
 	if __celery is None:
 		settings = Settings()
 
-		__celery = Celery(
+		__celery = Celery('tasks',
 			broker=settings.celery_broker,
-			backend=settings.celery_backend,
+			CELERY_RESULT_BACKEND=settings.celery_backend,
 			result_expires=settings.celery_result_expires,
 		)
 		__celery.conf.update(
@@ -38,7 +38,7 @@ def get_celery() -> Celery:
 	return __celery
 
 
-def a_get_result(result, poll_interval=0.05):
+def a_get_result(result, poll_interval=0.1):
 	"""
 	Periodically polls Celery for a job's result in an async manner.
 	This helps reduce blocking IO when waiting for Celery in FastAPI, although not very effectively.

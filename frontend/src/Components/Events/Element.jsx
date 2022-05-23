@@ -18,7 +18,8 @@ export default class Element extends React.Component {
         }
         
     };
-    componentDidMount(){
+    componentDidMount=()=>{
+        
         console.log("start mount")
         this.Search();
     }
@@ -27,8 +28,10 @@ export default class Element extends React.Component {
         this.SearchMore();
     };
     async Search(){
-        var task_id = this.props.task[this.props.web];
-        console.log("task id",task_id)
+       
+        var task_id = this.state.task[this.props.web]
+        //var task_id = this.props.task[this.props.web];
+        console.log("task id ",this.props.task,task_id)
         this.setState({loading:true})
         var result= await api.getResult(task_id);
         this.setState({list:[...this.state.list,...result]})
