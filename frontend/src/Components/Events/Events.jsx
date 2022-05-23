@@ -9,11 +9,11 @@ export default class Events extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            results: {"toanmath":"0"},
-            type: "",
-            subject: "",
-            grade: "",
-            level: "",
+            results: {},
+            type: "MidHK1",
+            subject: "MATH",
+            grade: "12",
+            level: "3",
             text: "",
         }
         
@@ -36,6 +36,9 @@ export default class Events extends React.Component {
     handleChangeLevel(option){
         this.setState({level:option.target.value});
     };
+    handleClick(){
+        this.doSearch()
+    }
     async doSearch(){
         var body = {
             "type": this.state.type,
@@ -45,13 +48,11 @@ export default class Events extends React.Component {
             "text": this.state.text,
             "page": this.state.page
         }
-        try{
-            var res = await api.searchall(body);
-        }
-        catch{
-            var res = {"result": {"toanmath":"0"}}
-        }
-        this.setState({results:res.result})
+        
+        var res = await api.searchall(body);
+        
+        console.log("result task id",res)
+        this.setState({results:res.data.result})
     };
     render() {
         return (
@@ -162,7 +163,7 @@ export default class Events extends React.Component {
                                     color: "white",
                                     }}
                                     variant="contained"
-                                    onClick={this.doSearch.bind(this)}
+                                    onClick={this.handleClick.bind(this)}
                                 >
                                     Search
                                 </Button>
@@ -175,22 +176,22 @@ export default class Events extends React.Component {
                 <div className="source-element">
                     
                     <div className="element">
-                        <Element title="ToanMath.com" task={this.state} web = "toanmath"></Element>
+                        <Element title="ToanMath.com" task={this.state.results} web = "toanmath"></Element>
                     </div>     
                     <div className="element">
-                        <Element title="ToanMath.com"  task={this.state} web = "toanmath"></Element>
+                        <Element title="ToanMath.com"  task={this.state.results} web = "toanmath"></Element>
                     </div>    
                     <div className="element">
-                        <Element title="ToanMath.com"  task={this.state} web = "toanmath"></Element>
+                        <Element title="ToanMath.com"  task={this.state.results} web = "toanmath"></Element>
                     </div>   
                     <div className="element">
-                        <Element title="ToanMath.com"  task={this.state} web = "toanmath"></Element>
+                        <Element title="ToanMath.com"  task={this.state.results} web = "toanmath"></Element>
                     </div>   
                     <div className="element">
-                        <Element title="ToanMath.com"  task={this.state} web = "toanmath"></Element>
+                        <Element title="ToanMath.com"  task={this.state.results} web = "toanmath"></Element>
                     </div>   
                     <div className="element">
-                        <Element title="ToanMath.com"  task={this.state} web = "toanmath"></Element>
+                        <Element title="ToanMath.com"  task={this.state.results} web = "toanmath"></Element>
                     </div>   
                 </div>             
                 

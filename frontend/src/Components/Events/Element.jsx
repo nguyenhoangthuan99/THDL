@@ -19,6 +19,7 @@ export default class Element extends React.Component {
         
     };
     componentDidMount(){
+        console.log("start mount")
         this.Search();
     }
     seeMore(){
@@ -26,7 +27,7 @@ export default class Element extends React.Component {
         this.SearchMore();
     };
     async Search(){
-        var task_id = this.props.task.results[this.props.web];
+        var task_id = this.props.task[this.props.web];
         console.log("task id",task_id)
         this.setState({loading:true})
         var result= await api.getResult(task_id);

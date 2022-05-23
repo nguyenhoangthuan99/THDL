@@ -8,7 +8,6 @@ services:
       context: .
     #network_mode: host
     volumes:
-      #- ./save_log:/smart-car-packing/save_log
       - ./:/app
     ports:
     - 8000:8000
@@ -21,7 +20,7 @@ services:
       - redis
       - celery_worker
     command:
-      uvicorn app:app --host 0.0.0.0 --port 8000 --reload
+      uvicorn app:app --host 0.0.0.0 --port 8000 
     
   celery_worker:
     image: thdl:latest
@@ -30,19 +29,18 @@ services:
       MODE: worker 
     #network_mode: host
     volumes:
-      #- ./save_log:/smart-car-packing/save_log
       - ./:/app
     depends_on:
       - redis
     command:
-     celery -A worker.tasks worker --loglevel=INFO --concurrency=100
+     celery -A worker.tasks worker --loglevel=INFO --concurrency=6
 
   redis:
     image: redis:latest
     restart: always
     #network_mode: host
     command:
-      redis-server --maxmemory 256mb
+      redis-server --maxmemory 512mb
     ports:
       - 6379:6379
     logging:

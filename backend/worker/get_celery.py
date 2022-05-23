@@ -4,7 +4,7 @@ sys.path.append("..")
 
 from celery import Celery
 from config import Settings
-
+import time
 __celery = None
 
 
@@ -53,4 +53,4 @@ async def a_get_result(result, poll_interval=0.05):
 	while True:
 		if result.ready():
 			return result.get()
-		await asyncio.sleep(poll_interval)
+		time.sleep(poll_interval)

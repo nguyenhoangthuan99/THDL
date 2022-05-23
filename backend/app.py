@@ -17,8 +17,10 @@ from worker.get_celery import get_celery, a_get_result
 from worker import tasks
 import uuid
 import uvicorn, celery
+import json
 app = FastAPI()
-
+with open('result.json', 'r') as fp:
+        data = json.load(fp)
 app.add_middleware(
 	CORSMiddleware,
 	allow_origins=["*"],
@@ -36,7 +38,6 @@ async def search(req:RequestSearch):
                 args=[
                     req.dict(),
                     web
-                    
                 ],
                 task_id=job_id,
             )
@@ -67,11 +68,19 @@ async def get_list_web_pages():
     "/result/{task_id}"
 )
 async def get_annotate_result(task_id:str):
-    try:
-        task=celery.result.AsyncResult(task_id)
-        return await a_get_result(task)
-    except:
-        raise HTTPException(status_code=422, detail=f"No tasks found")
+    global data
+    if task_id in data.keys():
+        return data[task_id]
+    else:
+        try:
+            task=celery.result.AsyncResult(task_id)
+            res = await a_get_result(task)
+            data[task_id] = res
+            with open('result.json', 'w') as fp:
+                json.dump(data, fp,indent=4,ensure_ascii=False)
+            return res
+        except:
+            raise HTTPException(status_code=422, detail=f"No tasks found")
 
 class SPAStaticFiles(StaticFiles):
 	async def get_response(self, path: str, scope):
