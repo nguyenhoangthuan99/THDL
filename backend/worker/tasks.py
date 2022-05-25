@@ -6,11 +6,11 @@ from service.factory import FACTORY
 from model.request import RequestSearch
 settings = Settings()
 sys.path.append("..")
-celery = get_celery()
+appication = get_celery()
 import os
 
-@celery.task(bind=True)
-def run_session(self, req:dict,engine:str):
+@appication.task(bind=True)
+def run_session(self, req:dict, engine:str):
     engine = FACTORY[engine]()
     loop = asyncio.get_event_loop()
     results = loop.run_until_complete(engine.process(RequestSearch(**req)))

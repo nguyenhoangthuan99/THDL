@@ -20,7 +20,7 @@ services:
       - redis
       - celery_worker
     command:
-      uvicorn app:app --host 0.0.0.0 --port 8000 
+      uvicorn app:app --host 0.0.0.0 --port 8000 --reload
     
   celery_worker:
     image: thdl:latest

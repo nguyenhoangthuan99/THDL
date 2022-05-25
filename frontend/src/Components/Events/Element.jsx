@@ -4,6 +4,8 @@ import Image from "../../Base/Image.jsx"
 import {events} from "../../dummydb/dbEvents"
 import api from "../../Base/fetchData"
 import ViewMore from "../Common/ViewMore";
+import {ReactSpinner} from 'react-spinning-wheel';
+import 'react-spinning-wheel/dist/style.css';
 export default class Element extends React.Component {
     constructor(props) {
         super(props)
@@ -14,54 +16,70 @@ export default class Element extends React.Component {
             list: [],
             activeIndex:null,
             page:1,
-            loading:false
+            loading:false,
+            body:{}
         }
         
     };
-    componentDidMount=()=>{
+    // componentDidMount=()=>{
         
-        console.log("start mount")
-        this.Search();
+        
+    // }
+    componentDidUpdate=(prevProps, prevState, snapshot)=>{
+        if(this.props.body != prevProps.body){
+            this.state.body = this.props.body;
+        }
+        if(this.props.task != prevProps.task){
+            console.log("start update")
+            var task_id = this.props.task[this.props.web]
+            //var task_id = this.props.task[this.props.web];
+            console.log("task id ",this.props.task,task_id,this.props.web)
+            this.Search(task_id);
+        }
+        
     }
     seeMore(){
         this.setState({page:this.state.page+1});
         this.SearchMore();
     };
-    async Search(){
-       
-        var task_id = this.state.task[this.props.web]
-        //var task_id = this.props.task[this.props.web];
-        console.log("task id ",this.props.task,task_id)
+    async Search(task_id){
+       if(task_id){
         this.setState({loading:true})
         var result= await api.getResult(task_id);
-        this.setState({list:[...this.state.list,...result]})
+        //console.log(result)
+        this.setState({list:result.data})
         this.setState({loading:false})
+       }
+        
+        
     }
     async SearchMore(){
         this.setState({loading:true})
         var body = {
-            "type": this.props.type,
-            "subject": this.props.subject,
-            "grade": this.props.grade,
-            "level": this.props.level,
-            "text": this.props.text,
+            "type": this.props.body.type,
+            "subject": this.props.body.subject,
+            "grade": this.props.body.grade,
+            "level": this.props.body.level,
+            "text": this.props.body.text,
             "page": this.state.page
         }
+        console.log("body",body,this.state.body)
         var result= await api.searchOneWeb(body,this.state.web);
-        this.setState({list:[...this.state.list,...result]})
+        this.setState({list:[...this.state.list,...result.data]})
         this.setState({loading:false})
     }
     render(){
-        let viewMoreActive = this.state.list.length > this.state.limit;
+
         return(
             <div className="wrapper-items">
                 <div><h2>{this.state.title}</h2></div>
                 <div className="eventsItems">
-                
                     {
-                        this.state.list.slice(0,this.state.limit).map((item,index) => (   
+                        this.state.loading?(<ReactSpinner />):(<div>
+                    {
+                        this.state.list.map((item,index) => (   
                                 
-                            <a href={item.link} target="_blank">
+                            <a href={item.link} target="_blank" key={index}>
                                 <div key={index} className="eventsItem">
                                     <div className="eventsDate">
                                     <img src={Image.vsdx}></img>
@@ -77,9 +95,10 @@ export default class Element extends React.Component {
                             </a>
                     ))
                     }
+                    </div>)}
                     
                 </div>
-                <div className="view-more">{viewMoreActive &&
+                <div className="view-more">{
                         <ViewMore  className="viewmore"  onClick={this.seeMore.bind(this)}/> }
                     </div>
             </div>

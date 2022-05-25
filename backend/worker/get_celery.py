@@ -21,18 +21,18 @@ def get_celery() -> Celery:
 	if __celery is None:
 		settings = Settings()
 
-		__celery = Celery('tasks',
+		__celery = Celery('jobs',
 			broker=settings.celery_broker,
-			CELERY_RESULT_BACKEND=settings.celery_backend,
+			backend=settings.celery_backend,
 			result_expires=settings.celery_result_expires,
 		)
-		__celery.conf.update(
-			{
-				"accept_content": ["json", "msgpack"],
-				"task_serializer": "msgpack",
-				"task_compression": "zstd",
-			}
-		)
+		# __celery.conf.update(
+		# 	{
+		# 		"accept_content": ["json", "msgpack"],
+		# 		"task_serializer": "msgpack",
+		# 		"task_compression": "zstd",
+		# 	}
+		# )
 		
 
 	return __celery
@@ -51,6 +51,6 @@ def a_get_result(result, poll_interval=0.1):
 	:return: The job's result
 	"""
 	while True:
-		if result.ready():
-			return result.get()
+		#if result.ready():
+		return result.get()
 		time.sleep(poll_interval)

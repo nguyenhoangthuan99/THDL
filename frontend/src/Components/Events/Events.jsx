@@ -4,7 +4,10 @@ import Element from "./Element";
 import dbOptions from "../../dummydb/dbOptions.jsx"
 import { Button, MenuItem, TextField } from "@material-ui/core";
 import api from "../../Base/fetchData"
-
+import ViewMore from "../Common/ViewMore";
+import {ReactSpinner} from 'react-spinning-wheel';
+import 'react-spinning-wheel/dist/style.css';
+import Image from "../../Base/Image.jsx"
 export default class Events extends React.Component {
     constructor(props) {
         super(props)
@@ -15,29 +18,57 @@ export default class Events extends React.Component {
             grade: "12",
             level: "3",
             text: "",
+            summary:[],
+            loadingSummary:false
         }
+        this.body = {
+            "type": this.state.type,
+            "subject": this.state.subject,
+            "grade": this.state.grade,
+            "level": this.state.level,
+            "text": this.state.text,
+            "page": 1
+        };
         
     };
     
     componentDidMount = () => {
-            this.doSearch();
+            this.doInit();
         }
+    async doInit(){
+        await this.doSearch();
+        await   this.doSummary()
+    }
     
-
     handleChangeType(option){
-        this.setState({type:option.target.value});
+        this.setState({type:option.target.value},()=>{
+            console.log(this.state.type)
+        });
+        
     };
     handleChangeSubjet(option){
-        this.setState({subject:option.target.value});
+        this.setState({subject:option.target.value},()=>{console.log(this.state.subject)});
+        
     };
     handleChangeGrade(option){
-        this.setState({grade:option.target.value});
+        this.setState({grade:option.target.value},()=>{console.log(this.state.grade)});
+        
     };
     handleChangeLevel(option){
-        this.setState({level:option.target.value});
+        this.setState({level:option.target.value},()=>{console.log(this.state.level)});
     };
     handleClick(){
         this.doSearch()
+    }
+    viewMore(){
+
+    }
+    async doSummary(){
+        this.setState({loadingSummary:true})
+        var res = await api.getSummary(this.state.results)
+        this.setState({summary:res.data})
+        this.setState({loadingSummary:false})
+
     }
     async doSearch(){
         var body = {
@@ -46,14 +77,15 @@ export default class Events extends React.Component {
             "grade": this.state.grade,
             "level": this.state.level,
             "text": this.state.text,
-            "page": this.state.page
+            "page": 1
         }
         
         var res = await api.searchall(body);
         
         
-        this.setState({results:res.data.result})
-        console.log("result task id",this.state.results)
+        this.setState({results:res.data.result},console.log(this.state.results));
+        console.log("result task id",this.state.results);
+        this.body=body;
     };
     render() {
         return (
@@ -146,7 +178,7 @@ export default class Events extends React.Component {
                                         name="searchtext"
                                         autoFocus
                                         id="outlined-input"
-                                        label="Tìm kiếm từ khóa"
+                                        label="Nhập từ khóa"
                                         type="text"
                                         fullWidth
                                       
@@ -177,19 +209,49 @@ export default class Events extends React.Component {
                 <div className="source-element">
                     
                     <div className="element">
-                        <Element title="ToanMath.com" task={this.state.results} web = "toanmath"></Element>
+                        <Element title="ToanMath.com" task={this.state.results} web = "toanmath" body={this.body}></Element>
                     </div>     
                     <div className="element">
-                        <Element title="ToanMath.com"  task={this.state.results} web = "toanmath"></Element>
+                        <Element title="ToanMath.com"  task={this.state.results} web = "toanmath" body={this.body}></Element>
                     </div>    
                     <div className="element">
-                        <Element title="ToanMath.com"  task={this.state.results} web = "toanmath"></Element>
+                        <Element title="ToanMath.com"  task={this.state.results} web = "toanmath" body={this.body}></Element>
                     </div>   
+                </div>              
+                <div>
+                    <h1>Tổng hợp</h1>
+                    <div>
+                    <div className="summaryItems">
+                    {
+                        this.state.loadingSummary?(<ReactSpinner />):(<div>
+                    {
+                        this.state.summary.map((item,index) => (   
+                                
+                            <a href={item.link} target="_blank" key={index}>
+                                <div key={index} className="eventsItem">
+                                    <div className="eventsDate">
+                                    <img src={Image.vsdx}></img>
+                                    </div>
+                                    <div className="eventsContent">
+                                    <div className="eventsItemTitle"> {item.title}</div>
+                                    <div className="eventsItemTime">
+                                        <img className="eventsIcon" src={Image.clock}/>
+                                        <div className="eventsItemStartEnd">{item.date}</div>
+                                    </div>
+                                    </div>
+                                </div>
+                            </a>
+                    ))
+                    }
+                    </div>)}
                     
-                    
-                </div>             
-                
-                <div><h1>Tổng hợp</h1></div>         
+                </div>
+                <div className="view-more">{
+                        <ViewMore  className="viewmore"  onClick={this.viewMore.bind(this)}/> }
+                    </div>
+                    </div>
+                </div>   
+                      
             </div>
         )
     }

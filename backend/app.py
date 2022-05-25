@@ -18,8 +18,12 @@ from worker import tasks
 import uuid
 import uvicorn, celery
 import json
-app = FastAPI()
+from service.factory import FACTORY
+from service.SummaryService import SummaryService
 
+summaryService = SummaryService()
+app = FastAPI()
+store_result = {}
 app.add_middleware(
 	CORSMiddleware,
 	allow_origins=["*"],
@@ -41,23 +45,17 @@ def search(req:RequestSearch):
                 task_id=job_id,
             )
         final[web] = job_id
+        print("job id", job_id)
+        store_result[job_id]=result
     return {"result":final}
     
 @app.post("/search/{web}")
 async def search_one_web(req:RequestSearch,web:str):
-    final = {}
     
-    job_id = str(web)+"-"+ str(uuid.uuid4())
-    result = tasks.run_session.apply_async(
-            args=[
-                req.dict(),
-                web
-                
-            ],
-            task_id=job_id,
-        )
-    final[web] = job_id
-    return final
+    engine = FACTORY[web]()
+    #result = tasks.run_session(req.dict(),web) 
+    result =await engine.process(req)
+    return result
 @app.get("/list-web-pages")
 async def get_list_web_pages():
     return settings.list_webpage
@@ -73,7 +71,7 @@ def get_annotate_result(task_id:str):
         return data[task_id]
     else:
         #try:
-            task=celery.result.AsyncResult(task_id)
+            task= store_result[task_id] #celery.result.AsyncResult(task_id)
             res =  a_get_result(task)
             data[task_id] = res
             with open('result.json', 'w') as fp:
@@ -81,7 +79,13 @@ def get_annotate_result(task_id:str):
             return res
         #except:
         #    raise HTTPException(status_code=422, detail=f"No tasks found")
-
+@app.post("/summary")
+async def summary(req:dict):
+    result = []
+    for k,v in req.items():
+        result+=get_annotate_result(v)
+    result = await summaryService.summary(result)
+    return result
 class SPAStaticFiles(StaticFiles):
 	async def get_response(self, path: str, scope):
 		response = await super().get_response(path, scope)

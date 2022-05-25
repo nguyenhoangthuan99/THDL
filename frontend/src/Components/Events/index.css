@@ -29,27 +29,31 @@
 }
 .filter-wrapper{
   display: flex;
-    flex-wrap: wrap;
-    flex-direction: row;
+  flex-direction: row;
     width: 100%;
     margin-left: 15px;
     gap: 20px;
     
 }
 .filter-type {
-  width: 12%;
+  width: 20%;
+  min-width: 150px;
 }
 .filter-subject {
   width: 12%;
+  min-width: 100px;
 }
 .filter-grade {
   width: 12%;
+  min-width: 100px;
 }
 .filter-level {
   width: 20%;
+  min-width: 20%;
 }
 .filter-text {
   width: 12%;
+  min-width: 12%;
 }
 .wrapper-items{
   border-radius: 10px;
@@ -59,6 +63,14 @@
   margin-right: 20px;
   margin-bottom: 20px;
   
+}
+.summaryItems{
+  overflow-y: scroll;
+      overflow-y:auto;
+      border: #444444 1px;
+     margin-bottom: 10px;
+     padding-bottom: 20px;
+     max-height: 400px;
 }
 .eventsItems{
       

@@ -30,7 +30,17 @@ const api = {
     async  getResult(task){
         const url = `/result/${task}`;
         return axiosClient.get(url);
-    }
+    },
+    async  getSummary(body){
+      const url = "/summary";
+      return axiosClient.post(
+        url,
+        body,
+        {
+            headers: { "X-Requested-With": "XMLHttpRequest" },
+        }
+        );
+  }
 }
 
 export default api;
