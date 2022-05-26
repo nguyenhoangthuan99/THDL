@@ -18,7 +18,7 @@ class ToanMathService(BaseService):
                     phase = "-giua"
                 else:
                     phase = ""
-                url = f"https://toanmath.com/de-thi{phase}-hk1-toan-{req.grade}"
+                url = f"https://toanmath.com/de-thi{phase}-hk1-toan-{req.grade}" if "1" in req.type else f"https://toanmath.com/de-thi{phase}-hk2-toan-{req.grade}"
             elif req.type == "HSG":
                 url = f"https://toanmath.com/de-thi-hsg-toan-{req.grade}" 
         if req.page > 1 and url != None:
