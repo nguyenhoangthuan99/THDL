@@ -17,7 +17,8 @@ export default class Element extends React.Component {
             activeIndex:null,
             page:1,
             loading:false,
-            body:{}
+            body:{},
+            
         }
         
     };

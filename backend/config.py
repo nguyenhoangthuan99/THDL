@@ -14,3 +14,5 @@ class Settings(BaseSettings):
     celery_broker: str = "redis://"+str(redis_ip)+":6379"
     celery_backend: str = "redis://"+str(redis_ip)+":6379"
     celery_result_expires: int = 20
+
+    

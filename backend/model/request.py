@@ -12,7 +12,7 @@ class Type(str,Enum):
 
 class Subject(str,Enum):
     MATH = "MATH"
-
+    PHYSIC = "PHYSIC"
 
 
 class RequestSearch(BaseModel):

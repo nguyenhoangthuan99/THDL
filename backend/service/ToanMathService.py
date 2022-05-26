@@ -3,15 +3,15 @@ from model.request import RequestSearch
 from model.responses import Response
 import asyncio
 from fastapi import HTTPException
+
 class ToanMathService(BaseService):
     def __init__(self,):
         super(ToanMathService, self).__init__()
-        
 
     def rewriteQuery(self,req:RequestSearch)-> str:
         url = None
         if (req.level == "3" or (int(req.grade)>=10 and req.level==""))and req.subject == "MATH":
-            if req.type == "TRY":
+            if req.type == "Try":
                 url = "https://toanmath.com/de-thi-thu-mon-toan"
             elif req.type in ["MidHK1","MidHK2","HK1","HK2"]:
                 if req.type in ["MidHK1","MidHK2"]:
@@ -25,6 +25,7 @@ class ToanMathService(BaseService):
             url += "/page/"+str(req.page)
         
         return url
+
     def parser_html(self,soup):
         
         results=[]
