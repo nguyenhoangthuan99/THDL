@@ -39,7 +39,7 @@ class ToanMathService(BaseService):
                 content = record.find('h3',class_='entry-title mh-posts-grid-title').find("a")
                 title = content.get("title")
                 link = content.get("href")
-                result = Response(title=title,link=link,date=date).dict()
+                result = Response(title=title,link=link,date=date,source="toanmath").dict()
                 results.append(result)
             return results
         except Exception as e:
