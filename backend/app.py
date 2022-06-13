@@ -81,10 +81,10 @@ def get_annotate_result(task_id:str):
         #    raise HTTPException(status_code=422, detail=f"No tasks found")
 @app.post("/summary")
 async def summary(req:dict):
-    result = []
-    for k,v in req.items():
-        result+=get_annotate_result(v)
-    #result = demo()
+    # result = []
+    # for k,v in req.items():
+    #     result+=get_annotate_result(v)
+    result = demo()
     result = await summaryService.summary(result)
     return result
 class SPAStaticFiles(StaticFiles):

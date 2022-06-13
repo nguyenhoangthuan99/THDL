@@ -12,3 +12,5 @@ python-jose
 uuid
 beautifulsoup4
 requests-async
+string-grouper
+pandas

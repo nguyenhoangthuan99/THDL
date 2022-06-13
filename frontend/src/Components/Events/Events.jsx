@@ -38,7 +38,7 @@ export default class Events extends React.Component {
             this.doInit();
         }
     async doInit(){
-        await this.doSearch();
+      //  await this.doSearch();
         await   this.doSummary()
     }
     
@@ -261,6 +261,9 @@ export default class Events extends React.Component {
                                                 <a href={item2.link} target="_blank" key={index}>
                                                     {item2.title}
                                                 </a>
+                                            </div>
+                                            <div className="eventsItemSource">
+                                                Source:    {item2.source}
                                             </div>
                                             <div className="eventsItemTime">
                                                 <img className="eventsIcon" src={Image.clock}/>
