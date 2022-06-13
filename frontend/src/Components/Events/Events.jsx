@@ -19,7 +19,9 @@ export default class Events extends React.Component {
             level: "3",
             text: "",
             summary:[],
-            loadingSummary:false
+            loadingSummary:false,
+            page:1,
+            expandindex:null
         }
         this.body = {
             "type": this.state.type,
@@ -57,16 +59,24 @@ export default class Events extends React.Component {
     handleChangeLevel(option){
         this.setState({level:option.target.value},()=>{console.log(this.state.level)});
     };
-    handleClick(){
-        this.doSearch()
+    handleExpand(idx){
+        this.setState({ expandindex: this.state.expandindex === idx ? null : idx });
     }
-    viewMore(){
-
+    async handleClick(){
+        this.setState({page:1},()=>{console.log(this.state.page)});
+        this.setState({summary:[]},()=>{console.log(this.state.summary)});
+        await this.doSearch()
+        await this.doSummary()
+    }
+    async viewMore(){
+        this.setState({page:this.state.page+1},()=>{console.log(this.state.page)});
+        await this.doSearch()
+        await this.doSummary()
     }
     async doSummary(){
         this.setState({loadingSummary:true})
         var res = await api.getSummary(this.state.results)
-        this.setState({summary:res.data})
+        this.setState({summary:[...this.state.summary,...res.data]})
         this.setState({loadingSummary:false})
 
     }
@@ -77,7 +87,7 @@ export default class Events extends React.Component {
             "grade": this.state.grade,
             "level": this.state.level,
             "text": this.state.text,
-            "page": 1
+            "page": this.state.page
         }
         
         var res = await api.searchall(body);
@@ -226,21 +236,54 @@ export default class Events extends React.Component {
                         this.state.loadingSummary?(<ReactSpinner />):(<div>
                     {
                         this.state.summary.map((item,index) => (   
-                                
-                            <a href={item.link} target="_blank" key={index}>
-                                <div key={index} className="eventsItem">
-                                    <div className="eventsDate">
-                                    <img src={Image.vsdx}></img>
+                            this.state.expandindex === index ?
+                            (
+                                <div>
+                                <div onClick={this.handleExpand.bind(this,index)} key={index}>  
+                                <div key={index} className="eventsItem-normal">
+                                            <div className="eventsIconItem">
+                                            <img src={Image.collapse} ></img>
+                                            </div>
+                                            <div className="eventsContent">
+                                            <div className="eventsItemTitle-normal"> {item[0].title}</div>
+                                            
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div className="eventsContent">
-                                    <div className="eventsItemTitle"> {item.title}</div>
-                                    <div className="eventsItemTime">
-                                        <img className="eventsIcon" src={Image.clock}/>
-                                        <div className="eventsItemStartEnd">{item.date}</div>
-                                    </div>
-                                    </div>
+                                <div  key={index}>   
+                                    { item.map((item2,index2) => (   
+                                        <div key={index2} className="eventsItem">
+                                            <div className="eventsDate">
+                                            <img src={Image.vsdx}></img>
+                                            </div>
+                                            <div className="eventsContent">
+                                            <div className="eventsItemTitle">
+                                                <a href={item2.link} target="_blank" key={index}>
+                                                    {item2.title}
+                                                </a>
+                                            </div>
+                                            <div className="eventsItemTime">
+                                                <img className="eventsIcon" src={Image.clock}/>
+                                                <div className="eventsItemStartEnd">{item2.date}</div>
+                                            </div>
+                                            </div>
+                                        </div>
+                                     ))}
+                                </div> 
                                 </div>
-                            </a>
+                            ):(
+                                <div onClick={this.handleExpand.bind(this,index)} key={index}>  
+                                <div key={index} className="eventsItem-normal">
+                                            <div className="eventsIconItem">
+                                            <img src={Image.expand} ></img>
+                                            </div>
+                                            <div className="eventsContent">
+                                            <div className="eventsItemTitle-normal"> {item[0].title}</div>
+                                            
+                                            </div>
+                                        </div>
+                                    </div>
+                            )
                     ))
                     }
                     </div>)}

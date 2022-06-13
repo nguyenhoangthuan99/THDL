@@ -23,7 +23,7 @@ class ToanMathService(BaseService):
                 url = f"https://toanmath.com/de-thi-hsg-toan-{req.grade}" 
         if req.page > 1 and url != None:
             url += "/page/"+str(req.page)
-        
+        print("url",url)
         return url
 
     def parser_html(self,soup):

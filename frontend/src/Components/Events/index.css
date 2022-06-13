@@ -67,9 +67,8 @@
 .summaryItems{
   overflow-y: scroll;
       overflow-y:auto;
-      border: #444444 1px;
-     margin-bottom: 10px;
-     padding-bottom: 20px;
+      
+    
      max-height: 400px;
 }
 .eventsItems{
@@ -81,7 +80,28 @@
      border: #444444 1px;
      margin-bottom: 10px;
      padding-bottom: 20px;
+    
     }
+.eventsItem-normal:hover{
+  cursor: pointer;
+}
+
+.eventsItem-normal{
+  display: flex;
+        flex-direction: row;
+        margin-top: 12px;
+        
+}
+.eventsIconItem {
+  margin: auto;
+  align-items: center;
+  background-color: #ffffff;
+}
+.eventsIconItem > img{
+  height: 40px;
+  width: 40px;
+  align-items: center;
+}
 .eventsItem{
         display: flex;
         flex-direction: row;
@@ -97,6 +117,7 @@
         align-items: center;
         width: 80px;
         height: auto;
+        margin-right: 10px;
         
       }
       .eventsDay{
@@ -118,10 +139,26 @@
         flex-direction: column;
         background: #f8f5f5 0% 0% no-repeat padding-box;
         border-radius: 2px;
-        margin-left: 10px;
+        padding: 7px 0;
         flex-grow: 1;
         margin-right: 20px;
         
+        
+      }
+      .eventsItemTitle-normal{
+        color: #333333;
+        font: Segoe UI;
+        font-size: 21px/25px;
+        font-weight: bold;
+      /*  @include textStyle(left, normal normal 600 16px/21px Segoe UI, 0px, #333333, 1);*/
+        padding-left: 5px;
+        
+        margin-left: 2px;
+       
+      }
+    
+      .eventsItemTitle-normal:hover{
+        color: #d14a4a;
       }
       .eventsItemTitle{
         color: #333333;
@@ -158,18 +195,18 @@
   cursor: pointer;
 }
     a:link {
-      color: red;
+      color: #d14a4a;
       text-decoration: none;
     }
     
     /* visited link */
     a:visited {
-      color: green;
+      color: rgb(188, 190, 188);
     }
     
     /* mouse over link */
     a:hover {
-      color: hotpink;
+      color: #d14a4a;
     }
     
     /* selected link */

@@ -8,4 +8,7 @@ class SummaryService:
     async def summary(self,list_object:list):# [a,b,c,d,e] -> [[a],[b,c],[d,e]]
         ###
         ###
+        list_object = [ list_object[i:i+5] for i in range(0, len(list_object), 5)
+]
+      
         return list_object

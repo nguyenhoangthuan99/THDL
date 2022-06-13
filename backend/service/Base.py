@@ -1,3 +1,4 @@
+from email import header
 import requests
 from bs4 import BeautifulSoup
 from model.request import RequestSearch
@@ -19,13 +20,14 @@ class BaseService:
 
     async def asyncDoQuery(self,url,sleep_range:float=0):
         client = http3.AsyncClient()
-        try:
+        if True:
+        #try:
             if sleep_range > 0:
                 await asyncio.sleep(random.random())
-            htmlText= await client.get(url)
+            htmlText= await client.get(url,headers={"User-Agent":"PostmanRuntime/7.29.0"})
             soup = BeautifulSoup(htmlText.text, 'html.parser')
-        except:
-            return None
+       # except:
+            #return None
         return soup
 
     def remove_accents(self,input_str):
@@ -47,7 +49,7 @@ class BaseService:
         query = query.lower()
         query=query.translate(str.maketrans('', '', string.punctuation))
         query = self.remove_accents(query)
-        query = query.split(" ")
+        query = query.replace(" ","").split(",")
         query = list(filter(None, query))
         for q in query:
             if q in target:

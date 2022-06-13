@@ -84,6 +84,7 @@ async def summary(req:dict):
     result = []
     for k,v in req.items():
         result+=get_annotate_result(v)
+    #result = demo()
     result = await summaryService.summary(result)
     return result
 class SPAStaticFiles(StaticFiles):
@@ -92,6 +93,16 @@ class SPAStaticFiles(StaticFiles):
 		if response.status_code == 404:
 			response = await super().get_response('.', scope)
 		return response
+def demo():
+    with open('result.json', 'r') as fp:
+        data = json.load(fp)
+    i = 0
+    res = []
+    for u,v in data.items():
+        if i == 5: break
+        i+=1
+        res += data[u]
+    return res
 
 app.mount('/', SPAStaticFiles(directory='build', html=True), name='build')
 """

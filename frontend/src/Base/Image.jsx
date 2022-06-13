@@ -24,10 +24,10 @@ import vsdx from "./Images/vsdx.png";
 import word from "./Images/word_-1.png";
 
 import play from "./Images/play.png"
-
+import item from "./Images/item.png"
 export default {
     arrowicon,clock,collapse,date,expand,icon,icon_1,icon_2,icon_3,icon_4,icon_5,icon_6,icon_7,icon_8,
-    logo,
+    logo, item,
     
     powerpoint,search,
    vsdx,word,play
