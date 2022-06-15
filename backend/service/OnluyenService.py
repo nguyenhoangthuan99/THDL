@@ -10,7 +10,7 @@ class OnluyenService(BaseService):
 
     def rewriteQuery(self, req: RequestSearch) -> str:
         url = None
-        if req.level == None:
+        if req.grade == None or grade < 6:
             return url
         else: 
             grade = str(req.grade)
@@ -18,6 +18,14 @@ class OnluyenService(BaseService):
                 url = f"https://www.onluyen.vn/thu-vien-tai-lieu/toan-{grade}/" 
             if req.subject == "PHYSIC":
                 url = f"https://www.onluyen.vn/thu-vien-tai-lieu/vat-ly-{grade}/"
+            if req.subject == "CHEMISTRY":
+                if req.grade < 8:
+                    url = None
+                    return url
+                else:
+                    url = f"https://www.onluyen.vn/thu-vien-tai-lieu/hoa-{grade}/"
+            if req.subject == "BIOLOGY":
+                url = f"https://www.onluyen.vn/thu-vien-tai-lieu/sinh-{grade}/"
         
         if req.page > 1 and url != None:
             url += "page/" +str(req.page)
@@ -48,7 +56,7 @@ class OnluyenService(BaseService):
             if url == None:
                 return results
             soup = await self.asyncDoQuery(url)
-            print(soup)
+        
             if soup == None:
                 raise HTTPException(404,"Not found, try again later")
             results = self.parser_html(soup)
