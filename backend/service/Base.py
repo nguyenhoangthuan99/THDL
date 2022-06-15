@@ -24,7 +24,7 @@ class BaseService:
         #try:
             if sleep_range > 0:
                 await asyncio.sleep(random.random())
-            htmlText= await client.get(url,headers={"User-Agent":"PostmanRuntime/7.29.0"})
+            htmlText= await client.get(url,headers={"User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36"})
             soup = BeautifulSoup(htmlText.text, 'html.parser')
        # except:
             #return None
