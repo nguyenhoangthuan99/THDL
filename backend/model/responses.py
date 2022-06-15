@@ -3,6 +3,7 @@ from pydantic import BaseModel
 from enum import Enum
 class Source(str,Enum):
     toanmath = "toanmath"
+    onluyen = "onluyen"
 
 class Response(BaseModel):
     title:str
