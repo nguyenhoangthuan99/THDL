@@ -1,3 +1,4 @@
 from .ToanMathService import ToanMathService
-
-FACTORY = {"toanmath":ToanMathService}
+from .OnluyenService import OnluyenService
+FACTORY = {"toanmath":ToanMathService,
+           "onluyen":OnluyenService}

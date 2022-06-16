@@ -13,6 +13,8 @@ class Type(str,Enum):
 class Subject(str,Enum):
     MATH = "MATH"
     PHYSIC = "PHYSIC"
+    CHEMISTRY = "CHEMISTRY"
+    BIOLOGY = "BIOLOGY"
 
 
 class RequestSearch(BaseModel):
