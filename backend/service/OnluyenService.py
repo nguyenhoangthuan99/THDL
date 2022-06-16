@@ -50,25 +50,25 @@ class OnluyenService(BaseService):
                         str1 = "giữa kỳ 1"
                         str2 = "giữa học kỳ 1"
                         for (key, value) in result.items():
-                            if key == "title" and (str1 in value or str2 in value):
+                            if key == "title" and (str1 in value.lower() or str2 in value.lower()):
                                 results.append(result)
                     if req.type == "MidHK2":
                         str1 = "giữa kỳ 2"
                         str2 = "giữa học kỳ 2"
                         for (key, value) in result.items():
-                            if key == "title" and (str1 in value or str2 in value):
+                            if key == "title" and (str1 in value.lower() or str2 in value.lower()):
                                 results.append(result)
                     if req.type == "HK1":
                         str1 = "cuối kỳ 1"
                         str2 = "cuối học kỳ 1"
                         for (key, value) in result.items():
-                            if key == "title" and (str1 in value or str2 in value):
+                            if key == "title" and (str1 in value.lower() or str2 in value.lower()):
                                 results.append(result)           
                     if req.type == "HK2":
                         str1 = "cuối kỳ 2"
                         str2 = "cuối học kỳ 2"
                         for (key, value) in result.items():
-                            if key == "title" and (str1 in value or str2 in value):
+                            if key == "title" and (str1 in value.lower() or str2 in value.lower()):
                                 results.append(result)
                 else: results.append(result)
             return results
