@@ -1,3 +1,4 @@
+import string
 from .Base import BaseService
 from model.request import RequestSearch
 from model.responses import Response
@@ -10,9 +11,9 @@ class OnluyenService(BaseService):
 
     def rewriteQuery(self, req: RequestSearch) -> str:
         url = None
-        if req.grade == None or grade < 6:
+        if req.grade == None or int(req.grade) < 6:
             return url
-        else: 
+        if req.subject in ["MATH", "PHYSIC", "CHEMISTRY", "BIOLOGY"]: 
             grade = str(req.grade)
             if req.subject == "MATH":
                 url = f"https://www.onluyen.vn/thu-vien-tai-lieu/toan-{grade}/" 
@@ -26,23 +27,53 @@ class OnluyenService(BaseService):
                     url = f"https://www.onluyen.vn/thu-vien-tai-lieu/hoa-{grade}/"
             if req.subject == "BIOLOGY":
                 url = f"https://www.onluyen.vn/thu-vien-tai-lieu/sinh-{grade}/"
-        
+        else: return url
         if req.page > 1 and url != None:
             url += "page/" +str(req.page)
         return url
     
-    def parser_html(self,soup):
+    def parser_html(self,soup, req: RequestSearch):
         results = []
         try:
-            records = soup.find_all('div', class_='entry-item')
+            records = soup.find_all('h5',class_ = "entry-title")
+            print(records)
             for record in records:
-                date = None
-                content = record.find('h5',class_='entry-title').find("a")
-                title = content.get("title")
+                date = ""
+                content = record.find('a')
+                print(content)
+                title = content.getText()
                 link = content.get("href")
                 result = Response(title=title,link=link,date=date,source="onluyen").dict()
-                results.append(result)
+                print(result)
+                if req.type in ["MidHK1", "MidHK2", "HK1", "HK2"]:
+                    if req.type == "MidHK1":
+                        str1 = "giữa kỳ 1"
+                        str2 = "giữa học kỳ 1"
+                        for (key, value) in result.items():
+                            if key == "title" and (str1 in value or str2 in value):
+                                results.append(result)
+                    if req.type == "MidHK2":
+                        str1 = "giữa kỳ 2"
+                        str2 = "giữa học kỳ 2"
+                        for (key, value) in result.items():
+                            if key == "title" and (str1 in value or str2 in value):
+                                results.append(result)
+                    if req.type == "HK1":
+                        str1 = "cuối kỳ 1"
+                        str2 = "cuối học kỳ 1"
+                        for (key, value) in result.items():
+                            if key == "title" and (str1 in value or str2 in value):
+                                results.append(result)           
+                    if req.type == "HK2":
+                        str1 = "cuối kỳ 2"
+                        str2 = "cuối học kỳ 2"
+                        for (key, value) in result.items():
+                            if key == "title" and (str1 in value or str2 in value):
+                                results.append(result)
+                else: results.append(result)
             return results
+            
+                
         except Exception as e:
             print(e)
             return results
@@ -52,15 +83,13 @@ class OnluyenService(BaseService):
         if req.text is None or req.text == "":
             
             url = self.rewriteQuery(req)
-            print(url)
             if url == None:
                 return results
             soup = await self.asyncDoQuery(url)
         
             if soup == None:
                 raise HTTPException(404,"Not found, try again later")
-            results = self.parser_html(soup)
-            print(results)
+            results = self.parser_html(soup,req)
             return results
         else:
             candidates = []
@@ -83,7 +112,7 @@ class OnluyenService(BaseService):
                     candidates.append(temp)
             for x in candidates:
                 #print(type(x))
-                results+=self.parser_html(x)
+                results+=self.parser_html(x,req)
            # candidates = [ for x in candidates]
             results = self.filterQuery(req.text,results)
             
