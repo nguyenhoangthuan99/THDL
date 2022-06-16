@@ -18,9 +18,13 @@ class OnluyenService(BaseService):
             if req.subject == "MATH":
                 url = f"https://www.onluyen.vn/thu-vien-tai-lieu/toan-{grade}/" 
             if req.subject == "PHYSIC":
-                url = f"https://www.onluyen.vn/thu-vien-tai-lieu/vat-ly-{grade}/"
+                if int(req.grade) == 12:
+                    url = None
+                    return url
+                else:
+                    url = f"https://www.onluyen.vn/thu-vien-tai-lieu/vat-ly-{grade}/"
             if req.subject == "CHEMISTRY":
-                if req.grade < 8:
+                if int(req.grade) < 8:
                     url = None
                     return url
                 else:
