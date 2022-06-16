@@ -4,6 +4,7 @@ from enum import Enum
 class Source(str,Enum):
     toanmath = "toanmath"
     onluyen = "onluyen"
+    tracnghiem = "tracnghiem"
 
 class Response(BaseModel):
     title:str
