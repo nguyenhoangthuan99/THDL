@@ -225,10 +225,10 @@ export default class Events extends React.Component {
                         <Element title="Onluyen.vn"  task={this.state.results} web = "onluyen" body={this.body}></Element>
                     </div>    
                     <div className="element">
-                        <Element title="Tracnghiem.net"  task={this.state.results} web = "tracnghiem" body={this.body}></Element>
+                        <Element title="TracNghiem.net"  task={this.state.results} web = "tracnghiem" body={this.body}></Element>
                     </div>   
                     <div className="element">
-                        <Element title="Tracnghiem.net"  task={this.state.results} web = "tracnghiem" body={this.body}></Element>
+                        <Element title="ThuVienDeThi.com"  task={this.state.results} web = "thuviendethi" body={this.body}></Element>
                     </div>   
                 </div>              
                 <div>

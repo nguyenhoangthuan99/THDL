@@ -5,6 +5,7 @@ class Source(str,Enum):
     toanmath = "toanmath"
     onluyen = "onluyen"
     tracnghiem = "tracnghiem"
+    thuviendethi = "thuviendethi"
 
 class Response(BaseModel):
     title:str

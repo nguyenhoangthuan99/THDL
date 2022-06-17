@@ -16,6 +16,7 @@ class SummaryService:
         dictionary = {}
         list_str = []
         for obj in list_object:
+            obj["title"]= obj["title"].lower().replace("hk","học kỳ").replace("kì","kỳ")
             dictionary[obj["title"].lower()] = obj
             list_str.append(obj["title"].lower())
         import numpy as np
