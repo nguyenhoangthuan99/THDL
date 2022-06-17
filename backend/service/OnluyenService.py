@@ -20,7 +20,7 @@ class OnluyenService(BaseService):
             if req.subject == "PHYSIC":
                 url = f"https://www.onluyen.vn/thu-vien-tai-lieu/vat-ly-{grade}/"
             if req.subject == "CHEMISTRY":
-                if req.grade < 8:
+                if int(req.grade) < 8:
                     url = None
                     return url
                 else:
@@ -30,6 +30,7 @@ class OnluyenService(BaseService):
         else: return url
         if req.page > 1 and url != None:
             url += "page/" +str(req.page)
+        print(url)
         return url
     
     def parser_html(self,soup, req: RequestSearch):

@@ -33,6 +33,10 @@ const subjects = [{
   {
     value: "CHEMISTRY",
     label: "Hóa học",
+  },
+  {
+    value: "BIOLOGY",
+    label: "Sinh học",
   },]
 const grades = [
     {

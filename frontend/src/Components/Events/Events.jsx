@@ -13,7 +13,7 @@ export default class Events extends React.Component {
         super(props)
         this.state = {
             results: {},
-            type: "MidHK1",
+            type: "HK2",
             subject: "MATH",
             grade: "12",
             level: "3",
@@ -222,10 +222,13 @@ export default class Events extends React.Component {
                         <Element title="ToanMath.com" task={this.state.results} web = "toanmath" body={this.body}></Element>
                     </div>     
                     <div className="element">
-                        <Element title="ToanMath.com"  task={this.state.results} web = "toanmath" body={this.body}></Element>
+                        <Element title="Onluyen.vn"  task={this.state.results} web = "onluyen" body={this.body}></Element>
                     </div>    
                     <div className="element">
-                        <Element title="ToanMath.com"  task={this.state.results} web = "toanmath" body={this.body}></Element>
+                        <Element title="Tracnghiem.net"  task={this.state.results} web = "tracnghiem" body={this.body}></Element>
+                    </div>   
+                    <div className="element">
+                        <Element title="Tracnghiem.net"  task={this.state.results} web = "tracnghiem" body={this.body}></Element>
                     </div>   
                 </div>              
                 <div>
