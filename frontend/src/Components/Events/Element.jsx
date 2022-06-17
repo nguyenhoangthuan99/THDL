@@ -13,7 +13,7 @@ export default class Element extends React.Component {
             title:this.props.title,
             task:this.props.task,
             web:this.props.web,
-            list: events,
+            list: [],
             activeIndex:null,
             page:1,
             loading:false,
@@ -35,7 +35,7 @@ export default class Element extends React.Component {
             var task_id = this.props.task[this.props.web]
             //var task_id = this.props.task[this.props.web];
             console.log("task id ",this.props.task,task_id,this.props.web)
-           // this.Search(task_id);
+            this.Search(task_id);
         }
         
     }

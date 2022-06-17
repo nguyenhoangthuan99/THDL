@@ -4,11 +4,18 @@ from model.request import RequestSearch
 from model.responses import Response
 import asyncio
 from fastapi import HTTPException
+import http3, string, random, requests
+from bs4 import BeautifulSoup
 
 class OnluyenService(BaseService):
     def __init__(self):
         super(OnluyenService,self).__init__()
-
+    def doQuery(self,url,sleep_range:float=0):
+        
+        htmlText = requests.get(url, verify=False,headers={"User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36"}).text
+        soup = BeautifulSoup(htmlText, 'html.parser')
+       # print(soup)
+        return soup
     def rewriteQuery(self, req: RequestSearch) -> str:
         url = None
         if req.grade == None or int(req.grade) < 6:
@@ -41,15 +48,15 @@ class OnluyenService(BaseService):
         results = []
         try:
             records = soup.find_all('h5',class_ = "entry-title")
-            print(records)
+            #print(records)
             for record in records:
                 date = ""
                 content = record.find('a')
-                print(content)
+                #print(content)
                 title = content.getText()
                 link = content.get("href")
                 result = Response(title=title,link=link,date=date,source="onluyen").dict()
-                print(result)
+               # print(result)
                 if req.type in ["MidHK1", "MidHK2", "HK1", "HK2"]:
                     if req.type == "MidHK1":
                         str1 = "giữa kỳ 1"

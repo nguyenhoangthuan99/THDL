@@ -3,11 +3,17 @@ from model.request import RequestSearch
 from model.responses import Response
 import asyncio
 from fastapi import HTTPException
-
+import http3, string, random, requests
+from bs4 import BeautifulSoup
 class TracNghiemService(BaseService):
     def __init__(self,):
         super(TracNghiemService, self).__init__()
-
+    async def asyncDoQuery(self,url,sleep_range:float=0):
+        
+        htmlText = requests.get(url, verify=False).text
+        soup = BeautifulSoup(htmlText, 'html.parser')
+       # print(soup)
+        return soup
     def rewriteQuery(self,req:RequestSearch)-> str:
         url = None
         if int(req.grade) >= 10:
@@ -15,6 +21,10 @@ class TracNghiemService(BaseService):
                 url = f"https://tracnghiem.net/de-kiem-tra/toan-hoc-lop-{req.grade}/"
             if req.subject == "PHYSIC":
                 url = f"https://tracnghiem.net/de-kiem-tra/vat-ly-lop-{req.grade}/"
+            if req.subject == "CHEMISTRY":
+                url = f"https://tracnghiem.net/de-kiem-tra/hoa-hoc-lop-{req.grade}/"
+            if req.subject == "BIOLOGY":
+                url = f"https://tracnghiem.net/de-kiem-tra/sinh-hoc-lop-{req.grade}/"
         return url
 
     def parser_html(self,soup, req:RequestSearch):
@@ -57,7 +67,7 @@ class TracNghiemService(BaseService):
             candidates = []
             page = req.page
             list_soup = []
-            for i in range((page-1)*5,page*5):
+            for i in range(2):
                 if i == 0 :continue
                 req.page=i
                 url = self.rewriteQuery(req)

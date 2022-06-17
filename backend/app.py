@@ -20,10 +20,11 @@ import uvicorn, celery
 import json
 from service.factory import FACTORY
 from service.SummaryService import SummaryService
-
+import time, random
 summaryService = SummaryService()
 app = FastAPI()
 store_result = {}
+data = {}
 app.add_middleware(
 	CORSMiddleware,
 	allow_origins=["*"],
@@ -65,8 +66,9 @@ async def get_list_web_pages():
     "/result/{task_id}"
 )
 def get_annotate_result(task_id:str):
-    with open('result.json', 'r') as fp:
-        data = json.load(fp)
+    time.sleep(random.random())
+    # with open('result.json', 'r') as fp:
+    #     data = json.load(fp)
     if task_id in data.keys():
         return data[task_id]
     else:
@@ -74,8 +76,8 @@ def get_annotate_result(task_id:str):
             task= store_result[task_id] #celery.result.AsyncResult(task_id)
             res =  a_get_result(task)
             data[task_id] = res
-            with open('result.json', 'w') as fp:
-                json.dump(data, fp,indent=4,ensure_ascii=False)
+            # with open('result.json', 'w') as fp:
+            #     json.dump(data, fp,indent=4,ensure_ascii=False)
             return res
         #except:
         #    raise HTTPException(status_code=422, detail=f"No tasks found")
