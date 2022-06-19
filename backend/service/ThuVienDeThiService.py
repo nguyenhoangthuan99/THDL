@@ -44,39 +44,39 @@ class ThuVienDeThiService(BaseService):
             for record in records:
                 content = record.find("h2").find("a")
                 date = ""
-                title = content.get("title")
                 link = content.get("href")
+                title = link.split("com/", 1)[1].replace("-"," ")
+                title = title.replace(title.split(" ")[-1],"")
                 result = Response(title=title,link=link,date=date,source="thuviendethi").dict()
                 if req.type in ["MidHK1","MidHK2","HK1", "HK2","Try"]:
                     if req.type == "MidHK1":
-                        str1 = "kỳ i"
-                        str2 = "kì i"
-                        str3 = "giữa"
+                        str1 = "ky i"
+                        str2 = "ki i"
+                        str3 = "giua"
                         for (key, value) in result.items():
                             if key == "title" and ((str1 in value.lower() or str2 in value.lower()) and str3 in value.lower()):
                                 results.append(result)  
                     if req.type == "MidHK2":
-                        str1 = "kỳ ii"
-                        str2 = "kì ii"
-                        str3 = "giữa"
+                        str1 = "ky ii"
+                        str2 = "ki ii"
+                        str3 = "giua"
                         for (key, value) in result.items():
                             if key == "title" and ((str1 in value.lower() or str2 in value.lower()) and str3 in value.lower()):
                                 results.append(result)  
                     if req.type == "HK1":
-                        str1 = "kỳ i"
-                        str2 = "kì i"
+                        str1 = "ky i"
+                        str2 = "ki i"
                         for (key, value) in result.items():
                             if key == "title" and (str1 in value.lower() or str2 in value.lower()):
                                 results.append(result)           
                     if req.type == "HK2":
-                        str1 = "kỳ ii"
-                        str2 = "kì ii"
-                        not_str = "giữa"
+                        str1 = "ky ii"
+                        str2 = "ki ii"
                         for (key, value) in result.items():
                             if key == "title" and (str1 in value.lower() or str2 in value.lower()):
                                 results.append(result) 
                     if req.type == "Try":
-                        str1 = "thi thử"
+                        str1 = "thi thu"
                         for (key, value) in result.items():
                             if key == "title" and (str1 in value.lower()):
                                 results.append(result) 
