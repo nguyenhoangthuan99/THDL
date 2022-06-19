@@ -46,7 +46,7 @@ class ThuVienDeThiService(BaseService):
                 date = ""
                 link = content.get("href")
                 title = link.split("com/", 1)[1].replace("-"," ")
-                print(title)
+                title = title.replace(title.split(" ")[-1],"")
                 result = Response(title=title,link=link,date=date,source="thuviendethi").dict()
                 if req.type in ["MidHK1","MidHK2","HK1", "HK2","Try"]:
                     if req.type == "MidHK1":
